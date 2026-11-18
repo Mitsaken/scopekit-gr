@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src https://conversionlogic-waitlist.dimkevin88.workers.dev; base-uri 'none'; form-action 'none'">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ScopeKit GR — Καθορισμός Παραδοτέων, Προδιαγραφών &amp; Αλλαγών Έργου</title>
+  <meta name="description" content="Ανεξάρτητο, τοπικό εργαλείο σύνταξης Project Brief, Πρωτοκόλλου Παραλαβής, Οροσήμων Πληρωμής και Change Request για ελεύθερους επαγγελματίες και agencies." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- COMPACT HEADER -->
+  <header class="site-header no-print">
+    <div class="header-inner">
+      <div class="brand-lockup">
+        <a href="#" class="brand-title">ScopeKit<span class="brand-title-dot">.gr</span></a>
+        <span class="brand-subtitle">Αντί για πρόχειρα Word έγγραφα — ντετερμινιστικό Project Brief, Ορόσημα &amp; ρήτρες Ν. 2121/1993 στον browser</span>
+      </div>
+
+      <div class="header-actions">
+        <button type="button" id="btn-import-json" class="btn btn-secondary">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <span>Εισαγωγή JSON</span>
+        </button>
+        <button type="button" id="btn-export-json" class="btn btn-secondary">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Backup</span>
+        </button>
+        <a href="#pro-waitlist" class="btn btn-primary">Πακέτο Pro (Αναμονή)</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- PRESETS BAR -->
+  <nav class="presets-strip no-print" aria-label="Έτοιμα πρότυπα έργων">
+    <div class="presets-inner">
+      <span class="presets-label">Πρότυπα Έργου:</span>
+      <div id="preset-pills-container" class="presets-list"></div>
+    </div>
+  </nav>
+
+  <!-- SPLIT WORKSPACE -->
+  <main class="workspace-main">
+
+    <!-- LEFT: PARAMETER BUILDER -->
+    <aside class="builder-panel no-print" aria-label="Παράμετροι έργου">
+      <div class="panel-header">
+        <h1 class="panel-title">Παράμετροι Έργου &amp; Συμβαλλόμενοι</h1>
+        <span class="panel-note">Αυτόματη τοπική αποθήκευση</span>
+      </div>
+
+      <div class="field-group">
+        <div>
+          <label for="inp-project-title" class="field-label">Τίτλος Έργου / Προσφοράς</label>
+          <input id="inp-project-title" type="text" class="field-input" placeholder="π.χ. Ανασχεδιασμός &amp; Κατασκευή E-shop" />
+        </div>
+
+        <div class="field-row-2">
+          <div>
+            <label for="inp-project-date" class="field-label">Ημερομηνία</label>
+            <input id="inp-project-date" type="date" class="field-input tnum" />
+          </div>
+          <div>
+            <label for="inp-project-budget" class="field-label">Budget (€)</label>
+            <input id="inp-project-budget" type="number" min="0" step="10" class="field-input tnum" placeholder="1800" />
+          </div>
+        </div>
+
+        <div class="field-row-3">
+          <div>
+            <label for="inp-project-rate" class="field-label">Extra Ώρα (€)</label>
+            <input id="inp-project-rate" type="number" min="0" step="5" class="field-input tnum" placeholder="40" />
+          </div>
+          <div>
+            <label for="inp-project-revisions" class="field-label">Αναθεωρήσεις</label>
+            <input id="inp-project-revisions" type="number" min="1" max="10" step="1" class="field-input tnum" placeholder="2" />
+          </div>
+          <div>
+            <label for="inp-project-window" class="field-label">Ημέρες Feedback</label>
+            <input id="inp-project-window" type="number" min="1" max="30" step="1" class="field-input tnum" placeholder="5" />
+          </div>
+        </div>
+
+        <div>
+          <label for="inp-project-desc" class="field-label">Σύντομη Περιγραφή &amp; Σκοπός</label>
+          <textarea id="inp-project-desc" rows="2" class="field-textarea" placeholder="Περιγραφή αντικειμένου έργου..."></textarea>
+        </div>
+      </div>
+
+      <!-- Parties -->
+      <details class="details-box">
+        <summary class="details-summary">Στοιχεία Επαγγελματία &amp; Πελάτη</summary>
+        <div class="details-body">
+          <div class="field-group">
+            <span class="subblock-title">Ανάδοχος (Τα Στοιχεία σας)</span>
+            <div class="field-row-2">
+              <input id="inp-fl-name" type="text" placeholder="Ονοματεπώνυμο" aria-label="Ονοματεπώνυμο αναδόχου" class="field-input" />
+              <input id="inp-fl-title" type="text" placeholder="Επάγγελμα / Τίτλος" aria-label="Τίτλος αναδόχου" class="field-input" />
+            </div>
+            <div class="field-row-2">
+              <input id="inp-fl-email" type="email" placeholder="Email" aria-label="Email αναδόχου" class="field-input" />
+              <input id="inp-fl-phone" type="text" placeholder="Τηλέφωνο" aria-label="Τηλέφωνο αναδόχου" class="field-input" />
+            </div>
+            <input id="inp-fl-afm" type="text" placeholder="ΑΦΜ &amp; Δ.Ο.Υ." aria-label="ΑΦΜ αναδόχου" class="field-input" />
+          </div>
+
+          <div class="field-group subblock-divider">
+            <span class="subblock-title">Εντολέας (Στοιχεία Πελάτη)</span>
+            <div class="field-row-2">
+              <input id="inp-cl-company" type="text" placeholder="Επωνυμία Εταιρείας" aria-label="Επωνυμία πελάτη" class="field-input" />
+              <input id="inp-cl-contact" type="text" placeholder="Υπεύθυνος Επικοινωνίας" aria-label="Υπεύθυνος πελάτη" class="field-input" />
+            </div>
+            <div class="field-row-2">
+              <input id="inp-cl-email" type="email" placeholder="Email Πελάτη" aria-label="Email πελάτη" class="field-input" />
+              <input id="inp-cl-phone" type="text" placeholder="Τηλέφωνο" aria-label="Τηλέφωνο πελάτη" class="field-input" />
+            </div>
+            <input id="inp-cl-afm" type="text" placeholder="ΑΦΜ &amp; Έδρα Πελάτη" aria-label="ΑΦΜ και έδρα πελάτη" class="field-input" />
+          </div>
+        </div>
+      </details>
+
+      <!-- Inclusions -->
+      <div class="list-section">
+        <div class="list-header">
+          <span class="list-title list-title-pass">Τι Περιλαμβάνεται (Inclusions)</span>
+          <button type="button" id="btn-add-inclusion" class="btn-link">+ Προσθήκη</button>
+        </div>
+        <div id="inclusions-list" class="list-scroll"></div>
+      </div>
+
+      <!-- Exclusions -->
+      <div class="list-section">
+        <div class="list-header">
+          <span class="list-title list-title-fail">Ρητές Εξαιρέσεις (Exclusions)</span>
+          <button type="button" id="btn-add-exclusion" class="btn-link">+ Προσθήκη</button>
+        </div>
+        <p class="list-helper">Εργασίες εκτός αρχικού προϋπολογισμού.</p>
+        <div id="exclusions-list" class="list-scroll"></div>
+      </div>
+
+      <!-- Deliverables -->
+      <div class="list-section">
+        <div class="list-header">
+          <span class="list-title list-title-ink">Παραδοτέα &amp; Κριτήρια Έγκρισης</span>
+          <button type="button" id="btn-add-deliverable" class="btn-link">+ Προσθήκη</button>
+        </div>
+        <div id="deliverables-list" class="list-scroll"></div>
+      </div>
+
+      <!-- Milestones -->
+      <div class="list-section">
+        <div class="list-header">
+          <span class="list-title list-title-ink">Ορόσημα &amp; Πληρωμές</span>
+          <div>
+            <span id="milestones-sum-display" class="sum-valid tnum">100%</span>
+            <button type="button" id="btn-add-milestone" class="btn-link">+ Προσθήκη</button>
+          </div>
+        </div>
+        <div id="milestones-list" class="list-scroll"></div>
+      </div>
+
+      <!-- Protection Clauses -->
+      <details class="details-box" open>
+        <summary class="details-summary">Ρήτρες Πνευματικής Ιδιοκτησίας, GDPR &amp; Εξόφλησης</summary>
+        <div class="details-body">
+          <div class="field-group">
+            <label class="clause-check">
+              <input id="inp-clause-ip" type="checkbox" checked />
+              <span>Πνευματικά Δικαιώματα (Ν. 2121/1993): μεταβίβαση μόνο μετά την πλήρη εξόφληση.</span>
+            </label>
+            <label class="clause-check">
+              <input id="inp-clause-gdpr" type="checkbox" checked />
+              <span>Προστασία Δεδομένων (GDPR Άρθρο 28): ευθύνη νομιμότητας υλικού στον Εντολέα.</span>
+            </label>
+            <label class="clause-check">
+              <input id="inp-clause-late" type="checkbox" checked />
+              <span>Όροι Υπερημερίας (Ν. 4152/2013): αναστολή εργασιών &amp; παράδοσης κωδικών σε καθυστέρηση &gt;5 εργάσιμων ημερών.</span>
+            </label>
+          </div>
+        </div>
+      </details>
+
+      <!-- Change Request Settings -->
+      <details class="details-box">
+        <summary class="details-summary">Ρυθμίσεις Change Request (Έξτρα Εργασία)</summary>
+        <div class="details-body">
+          <div class="field-row-2">
+            <input id="inp-cr-num" type="text" placeholder="Κωδικός CR (π.χ. CR-001)" aria-label="Κωδικός Change Request" class="field-input" />
+            <input id="inp-cr-by" type="text" placeholder="Αιτών (Πελάτης)" aria-label="Αιτών αλλαγής" class="field-input" />
+          </div>
+          <textarea id="inp-cr-summary" rows="2" placeholder="Περιγραφή αιτούμενης τροποποίησης..." aria-label="Περιγραφή αλλαγής" class="field-textarea"></textarea>
+          <textarea id="inp-cr-impact" rows="2" placeholder="Τεχνική επίπτωση &amp; απαιτήσεις..." aria-label="Τεχνική επίπτωση" class="field-textarea"></textarea>
+          <div class="field-row-2">
+            <div>
+              <label for="inp-cr-hours" class="field-label">Ώρες Υλοποίησης</label>
+              <input id="inp-cr-hours" type="number" min="0" step="0.5" placeholder="12" class="field-input tnum" />
+            </div>
+            <div>
+              <label for="inp-cr-days" class="field-label">Ημέρες Παράτασης</label>
+              <input id="inp-cr-days" type="number" min="0" step="1" placeholder="4" class="field-input tnum" />
+            </div>
+          </div>
+        </div>
+      </details>
+    </aside>
+
+    <!-- RIGHT: DOCUMENT PREVIEW & EXPORT -->
+    <section class="preview-column" aria-label="Προεπισκόπηση εγγράφου Α4">
+      <div class="preview-toolbar no-print">
+        <div class="doc-tabs" role="tablist" aria-label="Επιλογή εγγράφου">
+          <button type="button" data-doc="brief" role="tab" class="doc-tab-btn is-active">1. Project Brief</button>
+          <button type="button" data-doc="deliverables" role="tab" class="doc-tab-btn">2. Παραδοτέα</button>
+          <button type="button" data-doc="milestones" role="tab" class="doc-tab-btn">3. Ορόσημα</button>
+          <button type="button" data-doc="change_request" role="tab" class="doc-tab-btn">4. Change Request</button>
+        </div>
+
+        <div class="export-actions">
+          <button type="button" id="btn-export-docx" class="btn btn-secondary">DOCX / Pro</button>
+          <button type="button" id="btn-copy-md" class="btn btn-secondary">Copy MD</button>
+          <button type="button" id="btn-export-pdf" class="btn btn-primary">Εκτύπωση / PDF</button>
+        </div>
+      </div>
+
+      <article id="document-preview-sheet" class="a4-sheet"></article>
+    </section>
+
+  </main>
+
+  <!-- STATIC VALIDATION WAITLIST SECTION (0-EUR VALIDATION MODE) -->
+  <section id="pro-waitlist" class="waitlist-section no-print" aria-labelledby="waitlist-heading">
+    <div class="waitlist-card">
+      <div>
+        <div class="waitlist-kicker">ScopeKit GR Pro · Agency Pack (Early Access)</div>
+        <h2 id="waitlist-heading" class="waitlist-title">ScopeKit GR Pro — Επεξεργάσιμα Word (.doc/.docx), White-Label &amp; Πολλαπλά Έργα</h2>
+        <p class="waitlist-desc">
+          Μηδενικό κόστος προετοιμασίας και πλήρης τοπική εκτέλεση (αντί για απλήρωτα extra αιτήματα ή upload ιδιωτικών συμφωνιών στο cloud). Η δωρεάν έκδοση παρέχει σύνταξη και εκτύπωση Α4 PDF / Markdown στον browser σας. Εγγραφείτε για την έκδοση γραφείου (προγραμματισμένη εφάπαξ άδεια):
+        </p>
+        <ul class="waitlist-features">
+          <li>Άμεση εξαγωγή επεξεργάσιμων εγγράφων Word (<span class="mono">.docx</span> OOXML για Word &amp; Google Docs) για τελική αποστολή.</li>
+          <li>3 έτοιμα επεξεργάσιμα πρότυπα SOW (<span class="mono">.docx</span>: Web/E-shop, Branding/UI-UX, Digital Marketing) με ρήτρες Ν. 2121/1993, GDPR αρ. 28 &amp; Ν. 4152/2013.</li>
+          <li>White-label λειτουργία (προσαρμοσμένη επωνυμία γραφείου &amp; αφαίρεση ScopeKit υποσημείωσης) και αποθήκευση πολλαπλών έργων πελατών.</li>
+          <li>Αυτόνομη offline έκδοση (0 external CDNs) με εξαγωγή standalone HTML &amp; τοπική χρήση χωρίς σύνδεση.</li>
+        </ul>
+      </div>
+
+      <form id="proWaitlistForm" class="waitlist-form" data-project="scopekit-gr" novalidate>
+        <label for="proWaitlistEmail" class="field-label">Email ειδοποίησης (χωρίς χρέωση ή δέσμευση)</label>
+        <div class="waitlist-input-row">
+          <input type="email" id="proWaitlistEmail" class="field-input" placeholder="name@company.gr" required />
+          <button type="submit" id="proWaitlistSubmit" class="btn btn-primary">Εγγραφή</button>
+        </div>
+        <label class="waitlist-consent">
+          <input type="checkbox" id="proWaitlistConsent" required />
+          <span>Συναινώ ρητά στη χρήση του email μου αποκλειστικά για να ειδοποιηθώ όταν κυκλοφορήσει το πακέτο ScopeKit GR Pro (GDPR Άρθρο 6 παρ. 1α, δυνατότητα διαγραφής οποτεδήποτε).</span>
+        </label>
+        <p id="proWaitlistMsg" class="waitlist-msg" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="site-footer no-print">
+    <div class="footer-inner">
+      <span><strong>ScopeKit GR</strong> · Conversionlogic · Ανεξάρτητο εργαλείο τεχνικής οργάνωσης έργου · Τοπική εκτέλεση</span>
+      <span>Νομική Σημείωση: Τα πρότυπα και τα σημειώματα παραδοτέων δεν συνιστούν νομική συμβουλή ή δικηγορική εκπροσώπηση.</span>
+    </div>
+  </footer>
+
+  <script src="presets.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
